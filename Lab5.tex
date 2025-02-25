@@ -1,0 +1,169 @@
+\documentclass{article}\usepackage[]{graphicx}\usepackage[]{xcolor}
+% maxwidth is the original width if it is less than linewidth
+% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlsng}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hldef}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage{amsmath} %This allows me to use the align functionality.
+                     %If you find yourself trying to replicate
+                     %something you found online, ensure you're
+                     %loading the necessary packages!
+\usepackage{amsfonts}%Math font
+\usepackage{graphicx}%For including graphics
+\usepackage{hyperref}%For Hyperlinks
+\usepackage[shortlabels]{enumitem}% For enumerated lists with labels specified
+                                  % We had to run tlmgr_install("enumitem") in R
+\hypersetup{colorlinks = true,citecolor=black} %set citations to have black (not green) color
+\usepackage{natbib}        %For the bibliography
+\setlength{\bibsep}{0pt plus 0.3ex}
+\bibliographystyle{apalike}%For the bibliography
+\usepackage[margin=0.50in]{geometry}
+\usepackage{float}
+\usepackage{multicol}
+
+%fix for figures
+\usepackage{caption}
+\newenvironment{Figure}
+  {\par\medskip\noindent\minipage{\linewidth}}
+  {\endminipage\par\medskip}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+\vspace{-1in}
+\title{Lab 3 -- MATH 240 -- Computational Statistics}
+
+\author{
+  Henry Sun \\
+  Colgate University  \\
+  Department of Mathematics  \\
+  {\tt hlsun@colgate.edu}
+}
+
+\date{}
+
+\maketitle
+
+\begin{multicols}{2}
+\begin{abstract}
+This lab aims to answer the question of determining which band: Manchester Orchestra or The Front Bottoms, contributed more to the song ``Allentown." We used Essentia and LIWC to conduct audio and lyrical analysis of song. Manchester Orchestra likely contributed more to the song than The Front Bottoms.
+\end{abstract}
+
+\noindent \textbf{Keywords:} Installing, loading, and learning to use libraries; working with characters objects; coding \texttt{for()} loops; accessing elements of vectors and lists.
+
+\section{Introduction}
+\indent  
+In 2018, two bands -- The Front Bottoms and Manchester Orchestra -- released a song they collaborated on called Allen Town. In a statement to Noisey \citep{vice} -- the music arm of Vice -- Andy Hull of Manchester Orchestra recalled that the creation of this track started when Nate Hussey of All Get
+ Out sent him the first four lines of the track. Andy Hull worked out the melody and music and shared it with Brian Sella of The Front Bottoms, who then helped develop the chorus. \\
+
+\noindent
+\textbf{This brings us to an interesting question:} which band contributed most to the song?
+
+
+\subsection{Week 1}
+\indent In the first week of this lab, we built a batch file (\texttt{batfile.txt}) for data processing, containing all of the songs in the directory given to us. \\
+\indent We then processed a sample .json song, Au Revoir (Adios) in the Talon of the Hawk album by the Front Bottoms, and conducted some musical analysis on the song. 
+
+\subsection{Week 2}
+In the second week of this lab, we continued to compile data for each song from their .JSON file, but we also pulled data from each song from the \texttt{EssentiaModelOutput.csv} and \texttt{LIWCOutput.csv} files. We merge all of the data into a data frame, and used it to create a \texttt{.csv} file for testing and training. We also used the Shiny app to make plots with our data. 
+\columnbreak
+
+\section{Methods}
+\indent Throughout this lab, we used Essentia \citep{essentia} to conduct musical analysis on each song, giving us a rough idea of what each band's songs ``sound" like.
+
+\subsection{Week 1: Building a Batch File for Data Processing}
+\indent For our first task, we first began by downloading the directory of songs onto the computer and downloading the \texttt{stringr} package \citep{stringr}. By using the functions in the \texttt{stringr} package, we were able to identify which directories were albums by using the \verb|str_count()| function. For each album, we used a similar process to count the occurrences of \texttt{.wav} in each file to identify which files were songs. By using a for loop through each album, we were able to create a vector called \texttt{code.to.process}, with each song being stored in the format as a \texttt{.wav} file, and the corresponding song output in a .JSON file.
+We used other \texttt{stringr} functions to extract \texttt{artist}, \texttt{album}, and \texttt{track}, from each directory or file and used \verb|paste()| to create the .JSON file name.
+Finally, we used \verb|writeLines()| to turn our vector of songs into a batch file. 
+\subsection{Week 1: Processing JSON Output}
+\indent Our second task was to process .JSON Output from a sample song, Au Revoir (Adios) on the Talon Of The Hawk album by The Front Bottoms. We first begin by installing the \texttt{jsonlite} package \citep{jsonlite}, and repeating a similar process in our first task, by extracting the \texttt{artist}, \texttt{album}, and \texttt{track} from our sample file. We used \verb|fromJSON()| function from the \texttt{jsonlite} to load the file in as a list, where we could then extract the average loudness, beats per minute (bpm), musical key, song length, and tempo from each song. 
+
+\subsection{Week 2: Compile Data from Essentia}
+Our first task for the second week of this lab was nearly identical to the procedure followed in the second task from the first week. Using our previous example song (Au Revoir (Adios)), extracting additional data from each song, before repeating this process for each song in the EssentiaOutput folder, saving all the data into a data frame. \\
+\indent After loading into more data from each song from the \texttt{EssentiaModelOutput.csv} file, we extracted additional data by averaging values from certain data points. For example, we can get data on valence and arousal by average the data from the DEAM, emo Music, and MuSe datasets. 
+\indent By running all the lyrics of each song through a text analysis tool called LIWC, we were able to gather data that describes the thoughts, feelings, and personality traits based on the language used. We passed all this data into yet another data frame. 
+\indent Finally, we took all the data collected in the previous steps, and used the \verb|merge()| function to merge the data frames into one. The resulting dimensions of the data were by $181$ by $140$. We used this data set to create a testing \texttt{.csv} file, containing only the track ``Allentown" and a training \texttt{.csv} file, containing all tracks except ``Allentown."
+
+\section{Results}
+Using the Shiny app, I created a violin plot and a numerical summary of the data. The summary (Table \ref{num.sum}) and the violin plot (Figure \ref{plot1}) can be found in the appendix. \\
+\indent The mean of \texttt{relaxed} values for Manchester Orchestra and The Front Bottoms is $0.14$ and $0.34$, respectively. Standard deviation between all three bands was rather similar as well. Manchester Orchestra had overall lower \texttt{relaxed} values, having a smaller min and max values than The Front Bottoms. The max valye for Manchester Orchestra corresponds to the third quartile of The Front Bottoms. 
+
+\section{Discussion}
+\indent Overall, on average, this means that a song by Manchester Orchestra is much more relaxing than a song by The Front Bottoms. The \texttt{relaxed} value for ``Allentown" is 0.16, which suggests that from evaluting each artist purely by the \texttt{relaxed} value, Manchester Orchestra contributed more to the song than the Front Bottoms. \\
+\indent The \texttt{relaxed} value was the most visibly distinguishing value between Manchester Orchestra and The Front Bottoms when using the violin plot. I found the inclusion of each song as a point on the chart to be helpful in visualizing the general trend of each band. The Front Bottoms are generally more relaxed than Manchester Orchestra, except for a few outliers, forming a small bulge in the violin plot left of most of the rest of the songs.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Bibliography
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{2em}
+
+\begin{tiny}
+\bibliography{bib}
+\end{tiny}
+\end{multicols}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Appendix
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\onecolumn
+\begin{table}[ht]
+\centering
+\begin{tabular}{lrrcrrrrrr}
+  \hline
+artist & Observations & Mean & Standard Deviation & Min & Q1 & Median & Q3 & Max & IQR \\ 
+  \hline \hline
+All Get Out & 42 & 0.25 & 0.11 & 0.03 & 0.16 & 0.27 & 0.33 & 0.44 & 0.16 \\ 
+  Manchester Orchestra & 77 & 0.14 & 0.11 & 0.01 & 0.05 & 0.12 & 0.23 & 0.41 & 0.18 \\ 
+  The Front Bottoms & 61 & 0.34 & 0.09 & 0.10 & 0.31 & 0.35 & 0.41 & 0.47 & 0.10 \\ 
+   \hline
+\end{tabular}
+\caption{Numerical summary of the \texttt{relaxed} values for each song, sorted by artist} 
+\label{num.sum}
+\end{table}
+
+\end{document}
