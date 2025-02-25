@@ -75,7 +75,7 @@
 \begin{document}
 
 \vspace{-1in}
-\title{Lab 3 -- MATH 240 -- Computational Statistics}
+\title{Lab 5 -- MATH 240 -- Computational Statistics}
 
 \author{
   Henry Sun \\
@@ -97,7 +97,7 @@ This lab aims to answer the question of determining which band: Manchester Orche
 
 \section{Introduction}
 \indent  
-In 2018, two bands -- The Front Bottoms and Manchester Orchestra -- released a song they collaborated on called Allentown. In a statement to Noisey \citep{vice} -- the music arm of Vice -- Andy Hull of Manchester Orchestra recalled that the creation of this track started when Nate Hussey of All Get Out sent him the first four lines of the track. Andy Hull worked out the melody and music and shared it with Brian Sella of The Front Bottoms, who then helped develop the chorus. 
+In 2018, two bands -- The Front Bottoms and Manchester Orchestra -- released a song they collaborated on called ``Allentown". In a statement to Noisey \citep{vice} -- the music arm of Vice -- Andy Hull of Manchester Orchestra recalled that the creation of this track started when Nate Hussey of All Get Out sent him the first four lines of the track. Andy Hull worked out the melody and music and shared it with Brian Sella of The Front Bottoms, who then helped develop the chorus. 
 
 \indent Throughout this lab, we used Essentia \citep{essentia} to conduct musical analysis on each song, giving us a rough idea of what each band's songs ``sound" like. Using this data, we were able to conclude which band contributed the most to ``Allentown."
 
@@ -118,10 +118,10 @@ Our first task for the second week of this lab was nearly identical to the proce
 \indent Likewise, we used the LIWC-22 program \citep{liwc} to conduct lyrical analysis on each song. We were able to gather data that describes the thoughts, feelings, and personality traits based on the language used. We extracted additional data by averaging values from certain data points. For example, we can get data on valence and arousal by average the data from the DEAM, emo Music, and MuSe datasets. \\ 
 \indent We consolidated the data collected in the previous steps using the \verb|merge()| function. We used this data set to create a testing \texttt{.csv} file, containing only the track ``Allentown" and a training \texttt{.csv} file, containing all tracks except ``Allentown."
 \subsection{Week 3}
-During our final week, we picked out and summarized key features from each band to determine which one contributed the most to Allentown. We first began by calculating the upper and lower fences, and the minimum and maximum for each numerical feature. We compared these values to the same features found in the Allentown track, keeping note of all features within range for one band. Using this data, we were able to create graphs and tables using \verb|ggplot()| and \verb|xtable()| to help us better visualize each feature of interest. 
+During our final week, we picked out and summarized key features from each band to determine which one contributed the most to ``Allentown." We first began by calculating the upper and lower fences, and the minimum and maximum for each numerical feature. We compared these values to the same features found in the ``Allentown" track, keeping note of all features within range for one band. Using this data, we were able to create graphs and tables using \verb|ggplot()| and \verb|xtable()| to help us better visualize each feature of interest. 
 \section{Results}
-In order to identify which band contributed the most to the song, we first began by determining which features in Allentown to analyze. A feature was classified as "Within Range" if the numeric value was between the upper and lower fence for the same feature in each band. This was narrowed down even further to $21$ features having only one band in range. A table of all key features (Table \ref{feat.table}) can be found in the appendix. Overall, we can see that there were no key features with only All Get Out being the only band. However, there were $3$ features within range for The Front Bottoms and $18$ for Manchester Orchestra. It's also crucial to note here that $3$ out of the $4$ lyrical features are within range for The Front Bottoms, while all of the audio features were within range for Manchester Orchestra. \\
-\indent Below is a box plot of the only key feature that is within range of The Front Bottoms (Figure \ref{plot1}. \texttt{positivewords} is one of the three lyrical features (out of four total), along with \texttt{OtherP} and \texttt{conj} within range for The Front Bottoms. This should still be taken with a grain of salt, as \texttt{positivewords} only overlaps with the upper fence, and there are still outliers from both the other bands with more positive words than The Front Bottoms.
+In order to identify which band contributed the most to the song, we first began by determining which features in ``Allentown" to analyze. A feature was classified as "Within Range" if the numeric value was between the upper and lower fence for the same feature in each band. This was narrowed down even further to $21$ features having only one band in range. A table of all key features (Table \ref{feat.table}) can be found in the appendix. Overall, we can see that there were no key features with only All Get Out being the only band. However, there were $3$ features within range for The Front Bottoms and $18$ for Manchester Orchestra. It's also crucial to note here that $3$ out of the $4$ lyrical features are within range for The Front Bottoms, while all of the audio features were within range for Manchester Orchestra. \\
+\indent Below is a box plot (Figure 1) of the only key feature that is within range of The Front Bottoms. \texttt{positivewords} is one of the three lyrical features (out of four total), along with \texttt{OtherP} and \texttt{conj} within range for The Front Bottoms. This should still be taken with a grain of salt, as \texttt{positivewords} only overlaps with the upper fence, and there are still outliers from both the other bands with more positive words than The Front Bottoms. The \texttt{positivewords} for The Front Bottoms is skewed further right, and has a significantly larger IQR than the other two bands. \\
 
  \begin{figure}[H]
  %This code is evaluated, but not printed
@@ -132,13 +132,27 @@ In order to identify which band contributed the most to the song, we first began
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
 \includegraphics[width=\maxwidth]{figure/unnamed-chunk-1-1} 
 \end{knitrout}
- \caption{please work}
+ \caption{A boxplot of the \texttt{positivewords} feature for each band. The intercept represents the \texttt{positivewords} value for ``Allentown."}
  \label{plot1} %we can now reference plot1
  \end{figure}
-Above is a box plot of the only key feature that is a discrete variable. \texttt{positivewords} is one of the three lyrical features, along with \texttt{OtherP} and \texttt{conj} within range for The Front Bottoms.
+\indent The violin plot below (Figure 2) provides an example of a key feature that is clearly more characteristic of one band. The \verb|average_loudness| of ``Allentown" is within the IQR of Manchester Orchestra, while lying completely out of the upper and lower fence the other bands. However, it is still key to note that the average loudness has a higher variability in Manchester Orchestra compared to the other two bands, which is characterized by its large IQR. \\
+\begin{figure}[H]
+ %This code is evaluated, but not printed
+ %warning=FALSE and message=FALSE ensure no text is returned as a by product of
+ %printing; this would cause an error in that plot+text is returned instead of
+ %just the plot
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-2-1} 
+\end{knitrout}
+ \caption{A violin plot of the average loudness for each band. The intercept represents the average loudness for ``Allentown"}
+ \label{plot2} %we can now reference plot1
+ \end{figure}
 \section{Discussion}
-\indent Overall, on average, this means that a song by Manchester Orchestra is much more relaxing than a song by The Front Bottoms. The \texttt{relaxed} value for ``Allentown" is 0.16, which suggests that from evaluting each artist purely by the \texttt{relaxed} value, Manchester Orchestra contributed more to the song than the Front Bottoms. \\
-\indent The \texttt{relaxed} value was the most visibly distinguishing value between Manchester Orchestra and The Front Bottoms when using the violin plot. I found the inclusion of each song as a point on the chart to be helpful in visualizing the general trend of each band. The Front Bottoms are generally more relaxed than Manchester Orchestra, except for a few outliers, forming a small bulge in the violin plot left of most of the rest of the songs.
+\indent Overall, the analysis of key features in ``Allentown" suggest that Manchester Orchestra had the most significant contribution to ``Allentown" compared to The Front Bottoms and All Get Out. Additionally, there is significant evidence that a lot of the audio features are similar to songs by Manchester Orchestra. To a lesser extent, The Front Bottoms seem to have a larger contribution to the lyrical features of the song, with All Get Out contributing very minimally to the song. \\
+\indent This matches up pretty closely to the description of how the song was created in the introduction. The first four lines of the track were created by All Get Out, while the rest of the melody and music was finished by Manchester Orchestra, matching up with Manchester Orchestra's contribution to the audio features. Meanwhile, The Front Bottoms developed the chorus, which matches up with the limited contribution to some lyrical features. \\
+\indent Throughout this lab, we've learned how to process and analyze audio and lyrical data, in order to determine the contribution of one artist in a collaborative song or album. This lab has showed us that it's key to make a distinction between audio and lyrical data during analysis. The analysis of data can be quite subjective, as there are numerous ways to filter out data and create tables or plots, which may yield different conclusions.
+\pagebreak
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Bibliography
@@ -185,7 +199,7 @@ Above is a box plot of the only key feature that is a discrete variable. \texttt
   positivewords & Outlying & Outlying & Within Range \\ 
    \hline
 \end{tabular}
-\caption{workin?}
+\caption{A summary of all key features (features only within range for one band)}
 \label{feat.table}
 \end{table}
 \end{document}
