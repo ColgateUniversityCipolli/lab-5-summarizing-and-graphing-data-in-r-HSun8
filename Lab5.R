@@ -60,7 +60,7 @@ cat.cols <- essentia.data |>
 library("xtable")
 # consolidate all features into a tibble
 all.features <- tibble(key.features, features.tab) 
-final.features <- final.data |>
+final.features <- all.features |>
   rename("Key Features" = "key.features",
          "All Get Out" = "X.Within.Range.",
          "Manchester Orchestra" = "X.Within.Range..1",
@@ -71,9 +71,67 @@ final.features <- final.data |>
   
 features.tab = xtable(final.features)
 
-print(features.tab) 
+#print(features.tab) 
 
+# Step 4
+# plots
 
+# categorical data (probably not included)
+df.cat <- essentia.data %>%
+  dplyr::select("chords_key", "artist") %>%
+  drop_na() %>%
+  group_by(!!sym("chords_key"), !!sym("artist")) %>%
+  summarise(Observations = sum(!is.na(!!sym("chords_key"))), .groups = "drop") %>%
+  tidyr::complete(!!sym("chords_key"), !!sym("artist")) %>%
+  replace_na(list(Observations = 0)) %>%
+  group_by(!!sym("artist")) %>%
+  mutate(Proportion = Observations / sum(Observations)) %>%
+  arrange(desc(!!sym("chords_key"))) %>%
+  mutate(Percent = Proportion * 100) %>%
+  mutate(denoted.group = paste("artist", " = ", !!sym("artist"), sep = ""))
+####################################
+# Create Plot
+####################################
+cat.plot <- ggplot(df.cat, aes(x = !!sym("chords_key"), y = Proportion)) +
+  geom_bar(stat = "identity", width = 0.5, fill = "lightblue") +
+  get("theme_bw")() +
+  xlab("chords_key") +
+  ylab(ifelse("Proportion" == "", "Proportion", "Proportion")) +
+  ggtitle("", "") +
+  geom_hline(yintercept = 0) +
+  facet_wrap(~denoted.group)
+####################################
+# Print Plot
+####################################
+cat.plot
+# numeric data 
+poswords.plot <- ggplot(data=essentia.data,                       
+       aes(x=positivewords, y=artist)) +      
+  #geom_violin(fill="grey80")+
+  geom_boxplot(fill="grey80") +
+  theme_bw()+                                  
+  xlab("Positive Words")+                       
+  ylab("Artist")+   
+  geom_vline(xintercept=allentown.data$positivewords)
+coord_flip()
+poswords.plot
 
+# plot showing within range for each band
+dat.within = final.features |>
+  summarize(fb.within = sum(pull(final.features) == "Within Range"),
+            mo.within = sum(pull(final.features, var = -2) == "Within Range"),
+            ago.within = sum(pull(final.features, var = -3) == "Within Range"))
+
+# one more continuous plot  
+avgloudness.plot <- ggplot(data=essentia.data,                       
+                        aes(x=average_loudness, y=artist)) +      
+  geom_violin(fill="grey80")+
+  geom_boxplot(width = 0.05) +
+  theme_bw()+                                  
+  xlab("Average Loudness")+                       
+  ylab("Artist")+   
+  geom_vline(xintercept=allentown.data$average_loudness)
+coord_flip()
+avgloudness.plot
     
         
